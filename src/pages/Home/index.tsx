@@ -1,3 +1,7 @@
+import { useHistory } from "react-router-dom";
+
+import { auth, firebase } from "../../services/firebase";
+
 import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
 import googleIconImg from "../../assets/images/google-icon.svg";
@@ -6,6 +10,18 @@ import "./styles.css";
 import Button from "../../components/Button";
 
 function Home() {
+  const history = useHistory();
+
+  const handleCreateRoom = () => {
+    const provider = new firebase.auth.GoogleAuthProvider();
+
+    auth.signInWithPopup(provider).then((result) => {
+      console.log(result);
+    });
+
+    // history.push("/rooms/new");
+  };
+
   return (
     <div className="flex items-stretch h-screen">
       <aside className="flex flex-col justify-center w-7/12 px-20 py-32 bg-purple-500 text-white">
@@ -24,7 +40,10 @@ function Home() {
       <main className="flex flex-auto items-center justify-center py-0 px-8 bg-gray-50">
         <div className="flex flex-col items-stretch justify-center w-full max-w-xs">
           <img src={logoImg} alt="Logo do Letmeask" className="self-center" />
-          <button className="flex items-center justify-center mt-16 h-12 bg-red-500 font-body font-medium text-white rounded-lg hover:bg-red-700 transition duration-500">
+          <button
+            onClick={handleCreateRoom}
+            className="flex items-center justify-center mt-16 h-12 bg-red-500 font-body font-medium text-white rounded-lg hover:bg-red-700 transition duration-500"
+          >
             <img src={googleIconImg} alt="Google" className="mr-2" />
             Crie sua sala com o Google
           </button>
