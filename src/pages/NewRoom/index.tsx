@@ -6,6 +6,8 @@ import logoImg from "../../assets/images/logo.svg";
 import Button from "../../components/Button";
 
 function NewRoom() {
+  // const { user } = useAuth();
+
   return (
     <div className="flex items-stretch h-screen">
       <aside className="flex flex-col justify-center w-7/12 px-20 py-32 bg-purple-500 text-white">
