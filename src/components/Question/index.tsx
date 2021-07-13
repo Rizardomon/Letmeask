@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 import "./styles.css";
 
 type QuestionProps = {
@@ -6,9 +8,10 @@ type QuestionProps = {
     name: string;
     avatar: string;
   };
+  children?: ReactNode;
 };
 
-function Question({ content, author }: QuestionProps) {
+function Question({ content, author, children }: QuestionProps) {
   // Pegando apenas as props necessárias com desestruturação
   return (
     <div className="question bg-white rounded-lg shadow-lg p-6">
@@ -22,7 +25,7 @@ function Question({ content, author }: QuestionProps) {
           />
           <span className="ml-2 text-sm text-gray-400">{author.name}</span>
         </div>
-        <div></div>
+        <div>{children}</div>
       </footer>
     </div>
   );
