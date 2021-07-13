@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
+
 import { database } from "../services/firebase";
+
+import { useAuth } from "./useAuth";
 
 // Type das questions que vem do banco de dados
 type FirebaseQuestions = Record<
@@ -12,6 +15,12 @@ type FirebaseQuestions = Record<
     content: string;
     isAnswer: boolean;
     isHighlighted: boolean;
+    likes: Record<
+      string,
+      {
+        authorId: string;
+      }
+    >;
   }
 >;
 
@@ -25,9 +34,12 @@ type Questions = {
   content: string;
   isAnswer: boolean;
   isHighlighted: boolean;
+  likeCount: number;
+  likeId: string | undefined;
 };
 
 export function useRoom(roomId: string) {
+  const { user } = useAuth();
   const [questions, setQuestions] = useState<Questions[]>([]);
   const [title, setTitle] = useState("");
 
@@ -47,6 +59,10 @@ export function useRoom(roomId: string) {
             author: value.author,
             isHighlighted: value.isHighlighted,
             isAnswer: value.isAnswer,
+            likeCount: Object.values(value.likes ?? {}).length,
+            likeId: Object.entries(value.likes ?? {}).find(
+              ([key, like]) => like.authorId === user?.id
+            )?.[0], // * ?. Se não achar o like não retorna nada
           };
         }
       );
@@ -54,7 +70,11 @@ export function useRoom(roomId: string) {
       setTitle(databaseRoom.title);
       setQuestions(parsedQuestions);
     });
-  }, [roomId]); // Ele executa sempre que o roomId mudar
+
+    return () => {
+      roomRef.off("value");
+    };
+  }, [roomId, user?.id]); // Ele executa sempre que o roomId mudar
 
   return { questions, title };
 }

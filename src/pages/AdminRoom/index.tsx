@@ -23,32 +23,6 @@ function AdminRoom() {
   const [newQuestion, setNewQuestion] = useState("");
   const { questions, title } = useRoom(roomId);
 
-  async function handleSendQuestion(event: FormEvent) {
-    event.preventDefault();
-
-    if (newQuestion.trim() === "") {
-      return;
-    }
-
-    if (!user) {
-      throw new Error("You must be logged in");
-    }
-
-    const question = {
-      content: newQuestion,
-      author: {
-        name: user?.name,
-        avatar: user?.avatar,
-      },
-      isHighlighted: false,
-      isAnswer: false,
-    };
-
-    await database.ref(`rooms/${roomId}/questions`).push(question); // Cria uma nova questão na sala que está no momento
-
-    setNewQuestion("");
-  }
-
   return (
     <div className="h-screen bg-gray-50 font-body">
       <header className="border-b-2 border-gray-100">
