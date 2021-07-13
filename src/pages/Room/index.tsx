@@ -1,39 +1,15 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 
 import logoImg from "../../assets/images/logo.svg";
 
 import Button from "../../components/Button";
 import RoomCode from "../../components/RoomCode";
+import Question from "../../components/Question";
 
 import { database } from "../../services/firebase";
 import { useAuth } from "../../hooks/useAuth";
-
-// Type das questions que vem do banco de dados
-type FirebaseQuestions = Record<
-  string,
-  {
-    author: {
-      name: string;
-      avatar: string;
-    };
-    content: string;
-    isAnswer: boolean;
-    isHighlighted: boolean;
-  }
->;
-
-// Type das questions após o parse
-type Questions = {
-  id: string;
-  author: {
-    name: string;
-    avatar: string;
-  };
-  content: string;
-  isAnswer: boolean;
-  isHighlighted: boolean;
-};
+import { useRoom } from "../../hooks/useRoom";
 
 type RoomParams = {
   id: string;
@@ -45,33 +21,7 @@ function Room() {
   const roomId = params.id; // Pega o id que está na rota do browser
 
   const [newQuestion, setNewQuestion] = useState("");
-  const [questions, setQuestions] = useState<Questions[]>([]);
-  const [title, setTitle] = useState("");
-
-  useEffect(() => {
-    const roomRef = database.ref(`rooms/${roomId}`); // Pega a referencia da sala do firebase pelo id da sala
-    // O método on fico ouvindo as mudanças e trazendo elas sempre que algo muda na room
-    roomRef.on("value", (room) => {
-      const databaseRoom = room.val(); // Ele busca a room especifica
-      const firebaseQuestions: FirebaseQuestions = databaseRoom.questions ?? {}; // Ele busca e tipa todas as questions daquela room especifica
-
-      //* Método que transforma o formato das questions que vem do firebase em algo parecido com uma Matriz -> [key, value]
-      const parsedQuestions = Object.entries(firebaseQuestions).map(
-        ([key, value]) => {
-          return {
-            id: key,
-            content: value.content,
-            author: value.author,
-            isHighlighted: value.isHighlighted,
-            isAnswer: value.isAnswer,
-          };
-        }
-      );
-
-      setTitle(databaseRoom.title);
-      setQuestions(parsedQuestions);
-    });
-  }, [roomId]); // Ele executa sempre que o roomId mudar
+  const { questions, title } = useRoom(roomId);
 
   async function handleSendQuestion(event: FormEvent) {
     event.preventDefault();
@@ -152,6 +102,20 @@ function Room() {
             </Button>
           </div>
         </form>
+
+        <div className="mt-8">
+          {questions.map((question) => {
+            // Mapeando todas as questões
+            // Pra cada questão do Firebase retorna o componente
+            return (
+              <Question
+                key={question.id}
+                content={question.content}
+                author={question.author}
+              />
+            );
+          })}
+        </div>
       </main>
     </div>
   );
