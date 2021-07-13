@@ -59,8 +59,9 @@ export function useRoom(roomId: string) {
             author: value.author,
             isHighlighted: value.isHighlighted,
             isAnswer: value.isAnswer,
-            likeCount: Object.values(value.likes ?? {}).length,
+            likeCount: Object.values(value.likes ?? {}).length, // Verifica quantos likes tem
             likeId: Object.entries(value.likes ?? {}).find(
+              // Verifica se existe um like da mesma pessoa para nçao ter mais de um like por pessoa
               ([key, like]) => like.authorId === user?.id
             )?.[0], // * ?. Se não achar o like não retorna nada
           };
@@ -74,7 +75,7 @@ export function useRoom(roomId: string) {
     return () => {
       roomRef.off("value");
     };
-  }, [roomId, user?.id]); // Ele executa sempre que o roomId mudar
+  }, [roomId, user?.id]); // Ele executa sempre que o roomId ou o userId mudar
 
   return { questions, title };
 }

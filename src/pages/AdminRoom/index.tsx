@@ -1,5 +1,4 @@
-import { useState, FormEvent } from "react";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 import logoImg from "../../assets/images/logo.svg";
 import deleteImg from "../../assets/images/delete.svg";
@@ -9,7 +8,6 @@ import RoomCode from "../../components/RoomCode";
 import Question from "../../components/Question";
 
 import { database } from "../../services/firebase";
-import { useAuth } from "../../hooks/useAuth";
 import { useRoom } from "../../hooks/useRoom";
 
 type RoomParams = {
@@ -17,11 +15,22 @@ type RoomParams = {
 };
 
 function AdminRoom() {
-  const { user } = useAuth();
+  // const { user } = useAuth();
+  const history = useHistory();
   const params = useParams<RoomParams>(); // Pega os parametros da rota
   const roomId = params.id; // Pega o id que está na rota do browser
 
   const { questions, title } = useRoom(roomId);
+
+  async function handleEndRoom() {
+    if (window.confirm("Tem certeza que deseja excluir essa pergunta?")) {
+      await database.ref(`rooms/${roomId}`).update({
+        endedAt: new Date(),
+      });
+
+      history.push("/");
+    }
+  }
 
   async function handleDeleteQuestion(questionId: string) {
     if (window.confirm("Tem certeza que deseja excluir essa pergunta?")) {
@@ -36,7 +45,9 @@ function AdminRoom() {
           <img src={logoImg} alt="Letmeask" className="max-h-11" />
           <div className="flex gap-4">
             <RoomCode code={roomId} />
-            <Button isOutlined>Encerrar sala</Button>
+            <Button onClick={handleEndRoom} isOutlined>
+              Encerrar sala
+            </Button>
           </div>
         </div>
       </header>

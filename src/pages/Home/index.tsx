@@ -8,7 +8,7 @@ import illustrationImg from "../../assets/images/illustration.svg";
 import logoImg from "../../assets/images/logo.svg";
 import googleIconImg from "../../assets/images/google-icon.svg";
 
-import "./styles.css";
+import "./styles.scss";
 
 import Button from "../../components/Button";
 
@@ -38,6 +38,12 @@ function Home() {
     // Verifica se a sala existe no Firebase
     if (!roomRef.exists()) {
       alert("Could not find room!");
+    }
+
+    // Verifica se a sala já foi fechada e não permite mais a entrada
+    if (roomRef.val().endedAt) {
+      alert("Room already ended!");
+      return;
     }
 
     // Se a sala existe ele redireciona

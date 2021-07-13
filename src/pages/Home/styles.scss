@@ -1,0 +1,17 @@
+#separator {
+  &::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgb(156, 163, 175);
+    margin-left: 16px;
+  }
+
+  &::before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: rgb(156, 163, 175);
+    margin-right: 16px;
+  }
+}
