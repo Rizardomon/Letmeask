@@ -2,6 +2,7 @@ import { useState, FormEvent } from "react";
 import { useParams } from "react-router-dom";
 
 import logoImg from "../../assets/images/logo.svg";
+import deleteImg from "../../assets/images/delete.svg";
 
 import Button from "../../components/Button";
 import RoomCode from "../../components/RoomCode";
@@ -20,8 +21,13 @@ function AdminRoom() {
   const params = useParams<RoomParams>(); // Pega os parametros da rota
   const roomId = params.id; // Pega o id que está na rota do browser
 
-  const [newQuestion, setNewQuestion] = useState("");
   const { questions, title } = useRoom(roomId);
+
+  async function handleDeleteQuestion(questionId: string) {
+    if (window.confirm("Tem certeza que deseja excluir essa pergunta?")) {
+      await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
+    }
+  }
 
   return (
     <div className="h-screen bg-gray-50 font-body">
@@ -55,7 +61,14 @@ function AdminRoom() {
                 key={question.id}
                 content={question.content}
                 author={question.author}
-              />
+              >
+                <button
+                  type="button"
+                  onClick={() => handleDeleteQuestion(question.id)}
+                >
+                  <img src={deleteImg} alt="Remover pergunta" />
+                </button>
+              </Question>
             );
           })}
         </div>
