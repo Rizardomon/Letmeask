@@ -9,12 +9,30 @@ type QuestionProps = {
     avatar: string;
   };
   children?: ReactNode;
+  isAnswer?: boolean;
+  isHighlighted?: boolean;
 };
 
-function Question({ content, author, children }: QuestionProps) {
+function Question({
+  content,
+  author,
+  children,
+  isAnswer = false,
+  isHighlighted = false,
+}: QuestionProps) {
   // Pegando apenas as props necessárias com desestruturação
   return (
-    <div className="question bg-white rounded-lg shadow-lg p-6">
+    <div
+      className={`
+      question bg-white rounded-lg shadow-lg p-6
+      ${
+        isHighlighted && !isAnswer
+          ? "bg-purple-50 border border-purple-500"
+          : ""
+      }
+      ${isAnswer ? "bg-gray-200" : ""}
+      `}
+    >
       <p className="text-gray-800">{content}</p>
       <footer className="flex justify-between items-center mt-6">
         <div className="flex items-center">
@@ -23,9 +41,15 @@ function Question({ content, author, children }: QuestionProps) {
             alt={author.name}
             className="w-8 h-8 rounded-full"
           />
-          <span className="ml-2 text-sm text-gray-400">{author.name}</span>
+          <span
+            className={`ml-2 text-sm ${
+              isHighlighted ? "text-gray-900" : "text-gray-400"
+            }`}
+          >
+            {author.name}
+          </span>
         </div>
-        <div>{children}</div>
+        <div className="flex gap-4">{children}</div>
       </footer>
     </div>
   );

@@ -73,6 +73,7 @@ export function useRoom(roomId: string) {
     });
 
     return () => {
+      // Desinscreve do listener
       roomRef.off("value");
     };
   }, [roomId, user?.id]); // Ele executa sempre que o roomId ou o userId mudar
