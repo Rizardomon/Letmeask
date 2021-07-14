@@ -30,7 +30,7 @@ function NewRoom() {
       authorId: user?.name,
     });
 
-    history.push(`/rooms/${firebaseRoom.key}`); // key é o id do documento
+    history.push(`/admin/rooms/${firebaseRoom.key}`); // key é o id do documento
   }
 
   return (
