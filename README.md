@@ -8,20 +8,14 @@
   <a href="#-como-executar">Como executar</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
 </p>
 
-<p align="center">
-  <img alt="License" src="https://img.shields.io/static/v1?label=license&message=MIT&color=8257E5&labelColor=000000">
-
- <img src="https://img.shields.io/static/v1?label=NLW&message=04&color=8257E5&labelColor=000000" alt="NLW 04" />
-</p>
-
 <br>
 
 <p align="center">
-  <img alt="Happy" src=".github/Room-user.png" width="100%">
+  <img alt="Sala do usuário" src=".github/room-user.png" width="100%">
 </p>
 
 <p align="center">
-  <img alt="Happy" src=".github/Room-admin.png" width="100%">
+  <img alt="Sala do admin" src=".github/room-admin.png" width="100%">
 </p>
 
 ## ✨ Tecnologias
